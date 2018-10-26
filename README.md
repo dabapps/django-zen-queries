@@ -99,7 +99,7 @@ def menu(request):
 
 The `queries_disabled` context manager here does one very simple thing: it stops any code inside it from running database queries. At all. If they try to run a query, the application will raise a `QueriesDisabledError` exception and blow up.
 
-That's _almost_ enough to give us what we need, but not quite. As any Django developer will know, the code above will _always_ raise a `QueriesDisabledError`, because the queryset (`Pizza.objects.all()`) is _lazy_. The database query doesn't actually get run until the queryset is iterated - which happens in the template! So, `django-zen-queries` provides a tiny helper function, `fetch`, which forces evaluation of a queryset:
+That's _almost_ enough to give us what we need, but not quite. The code above will _always_ raise a `QueriesDisabledError`, because the queryset (`Pizza.objects.all()`) is _lazy_. The database query doesn't actually get run until the queryset is iterated - which happens in the template! So, `django-zen-queries` provides a tiny helper function, `fetch`, which forces evaluation of a queryset:
 
 ```python
 def menu(request):
