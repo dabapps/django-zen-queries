@@ -50,7 +50,7 @@ class TemplateResponseTestCase(TestCase):
             response.render()
 
 
-class FakeSerializer:
+class FakeSerializer(object):
     def __init__(self, queryset):
         self.queryset = queryset
 
