@@ -10,10 +10,13 @@ env:
 - DJANGO_VERSION=1.8
 - DJANGO_VERSION=1.11
 - DJANGO_VERSION=2.0
+- DJANGO_VERSION=2.1
 matrix:
   exclude:
     - python: '2.7'
       env: 'DJANGO_VERSION=2.0'
+    - python: '2.7'
+      env: 'DJANGO_VERSION=2.1'
 install:
 - pip install -U django==$DJANGO_VERSION
 script: python manage.py test
