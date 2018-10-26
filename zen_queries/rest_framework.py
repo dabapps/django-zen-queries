@@ -1,8 +1,8 @@
 from zen_queries import queries_disabled
 
 
-class QueriesDisabledSerializerMixin:
+class QueriesDisabledSerializerMixin(object):
     @property
     def data(self):
         with queries_disabled():
-            return super().data
+            return super(QueriesDisabledSerializerMixin, self).data
