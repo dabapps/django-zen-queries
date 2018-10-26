@@ -113,7 +113,7 @@ Now we have exactly what we need: when a developer comes along and adds `{{ pizz
 
 ### Extra tools
 
-As well as the context managers, the package provides some helps to make it easier to use in common situations:
+As well as the context managers, the package provides some tools to make it easier to use in common situations:
 
 #### TemplateResponse subclass
 
