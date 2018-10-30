@@ -115,6 +115,10 @@ Now we have exactly what we need: when a developer comes along and adds `{{ pizz
 
 As well as the context managers, the package provides some tools to make it easier to use in common situations:
 
+#### Render shortcut
+
+If you're using the Django `render` shortcut (as in the example above), to avoid having to add the context manager to every view, you can change your import `from django.shortcuts import render` to `from zen_queries import render`. All the views in that file will automatically be disallowed from running queries during template rendering.
+
 #### TemplateResponse subclass
 
 `TemplateResponse` (and `SimpleTemplateResponse`) objects are lazy, meaning that template rendering happens on the way "out" of the Django stack. `zen_queries.TemplateResponse` and `zen_queries.SimpleTemplateResponse` are subclasses of these with `queries_disabled` applied to the `render` method.

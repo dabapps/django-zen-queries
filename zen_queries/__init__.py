@@ -3,6 +3,7 @@ from zen_queries.decorators import (
     queries_dangerously_enabled,
     QueriesDisabledError,
 )
+from zen_queries.render import render
 from zen_queries.rest_framework import QueriesDisabledSerializerMixin
 from zen_queries.template_response import TemplateResponse, SimpleTemplateResponse
 from zen_queries.utils import fetch
