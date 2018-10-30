@@ -10,25 +10,26 @@ def _fake(*args, **kwargs):
     raise QueriesDisabledError()
 
 
-def _apply_monkeypatch():
+def _apply_monkeypatch(force=False):
     for connection in connections.all():
         connection._zen_queries_depth = getattr(connection, "_zen_queries_depth", 0) + 1
-        if connection._zen_queries_depth == 1:
+        if connection._zen_queries_depth == 1 or force:
             connection._real_create_cursor = connection.create_cursor
             connection.create_cursor = _fake
 
 
-def _remove_monkeypatch():
+def _remove_monkeypatch(force=False):
     for connection in connections.all():
         if not hasattr(connection, "_zen_queries_depth"):
             assert hasattr(
                 connection, "_real_create_cursor"
             ), "Cannot enable queries, not currently inside a queries_disabled block"
         connection._zen_queries_depth -= 1
-        if connection._zen_queries_depth == 0:
+        if connection._zen_queries_depth == 0 or force:
             connection.create_cursor = connection._real_create_cursor
             del connection._real_create_cursor
-            del connection._zen_queries_depth
+            if not force:
+                del connection._zen_queries_depth
 
 
 @contextmanager
@@ -42,8 +43,8 @@ def queries_disabled():
 
 @contextmanager
 def queries_dangerously_enabled():
-    _remove_monkeypatch()
+    _remove_monkeypatch(force=True)
     try:
         yield
     finally:
-        _apply_monkeypatch()
+        _apply_monkeypatch(force=True)

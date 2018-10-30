@@ -40,6 +40,29 @@ class ContextManagerTestCase(TestCase):
             with queries_dangerously_enabled():
                 pass
 
+        # enabling queries should always enable them, no matter how deeply
+        # nested we are, and should restore the stack afterwards
+        with queries_disabled():
+            with queries_dangerously_enabled():
+                Widget.objects.count()
+            with queries_disabled():
+                with queries_dangerously_enabled():
+                    Widget.objects.count()
+                with queries_disabled():
+                    with queries_dangerously_enabled():
+                        Widget.objects.count()
+                    with self.assertRaises(QueriesDisabledError):
+                        Widget.objects.count()
+                with queries_dangerously_enabled():
+                    Widget.objects.count()
+                with self.assertRaises(QueriesDisabledError):
+                    Widget.objects.count()
+            with queries_dangerously_enabled():
+                Widget.objects.count()
+            with self.assertRaises(QueriesDisabledError):
+                Widget.objects.count()
+        Widget.objects.count()
+
 
 class FetchTestCase(TestCase):
     def test_fetch_all(self):
