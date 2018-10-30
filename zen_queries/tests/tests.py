@@ -17,6 +17,18 @@ class ContextManagerTestCase(TestCase):
             with self.assertRaises(QueriesDisabledError):
                 Widget.objects.count()
 
+    def test_nested_queries_disabled(self):
+        with queries_disabled():
+            with self.assertRaises(QueriesDisabledError):
+                Widget.objects.count()
+            with queries_disabled():
+                with self.assertRaises(QueriesDisabledError):
+                    Widget.objects.count()
+                with queries_disabled():
+                    with self.assertRaises(QueriesDisabledError):
+                        Widget.objects.count()
+        Widget.objects.count()
+
     def test_queries_enabled(self):
         with queries_disabled():
             with queries_dangerously_enabled():
