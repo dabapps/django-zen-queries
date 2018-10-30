@@ -10,40 +10,72 @@ def _fake(*args, **kwargs):
     raise QueriesDisabledError()
 
 
-def _apply_monkeypatch():
-    for connection in connections.all():
-        connection._zen_queries_depth = getattr(connection, "_zen_queries_depth", 0) + 1
-        if connection._zen_queries_depth == 1:
-            connection._real_create_cursor = connection.create_cursor
-            connection.create_cursor = _fake
+def _apply_monkeypatch(connection):
+    connection._queries_disabled = True
+    connection._real_create_cursor = connection.create_cursor
+    connection.create_cursor = _fake
 
 
-def _remove_monkeypatch():
+def _remove_monkeypatch(connection):
+    connection.create_cursor = connection._real_create_cursor
+    del connection._real_create_cursor
+    del connection._queries_disabled
+
+
+def _disable_queries():
     for connection in connections.all():
-        if not hasattr(connection, "_zen_queries_depth"):
-            assert hasattr(
-                connection, "_real_create_cursor"
-            ), "Cannot enable queries, not currently inside a queries_disabled block"
-        connection._zen_queries_depth -= 1
-        if connection._zen_queries_depth == 0:
-            connection.create_cursor = connection._real_create_cursor
-            del connection._real_create_cursor
-            del connection._zen_queries_depth
+        _apply_monkeypatch(connection)
+
+
+def _enable_queries():
+    for connection in connections.all():
+        _remove_monkeypatch(connection)
+
+
+def _are_queries_disabled():
+    for connection in connections.all():
+        return hasattr(connection, "_queries_disabled")
+
+
+def _are_queries_dangerously_enabled():
+    for connection in connections.all():
+        return hasattr(connection, "_queries_dangerously_enabled")
+
+
+def _mark_as_dangerously_enabled():
+    for connection in connections.all():
+        connection._queries_dangerously_enabled = True
+
+
+def _mark_as_not_dangerously_enabled():
+    for connection in connections.all():
+        del connection._queries_dangerously_enabled
 
 
 @contextmanager
 def queries_disabled():
-    _apply_monkeypatch()
+    queries_already_disabled = _are_queries_disabled()
+    if not queries_already_disabled and not _are_queries_dangerously_enabled():
+        _disable_queries()
     try:
         yield
     finally:
-        _remove_monkeypatch()
+        if not queries_already_disabled and not _are_queries_dangerously_enabled():
+            _enable_queries()
 
 
 @contextmanager
 def queries_dangerously_enabled():
-    _remove_monkeypatch()
+    queries_dangerously_enabled_before = _are_queries_dangerously_enabled()
+    if not queries_dangerously_enabled_before:
+        _mark_as_dangerously_enabled()
+    queries_disabled_before = _are_queries_disabled()
+    if queries_disabled_before:
+        _enable_queries()
     try:
         yield
     finally:
-        _apply_monkeypatch()
+        if queries_disabled_before:
+            _disable_queries()
+        if not queries_dangerously_enabled_before:
+            _mark_as_not_dangerously_enabled()

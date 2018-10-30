@@ -35,10 +35,26 @@ class ContextManagerTestCase(TestCase):
             with queries_dangerously_enabled():
                 Widget.objects.count()
 
-        # queries can't be enabled if they've not been disabled
-        with self.assertRaises(AssertionError):
-            with queries_dangerously_enabled():
-                pass
+    def test_outer_queries_enabled(self):
+        # enabling queries should always enable them, and subsequent
+        # calls to disable should do nothing
+        with queries_dangerously_enabled():
+            with queries_disabled():
+                Widget.objects.count()
+
+    def test_nested_queries_enabled(self):
+        with queries_disabled():
+            with queries_disabled():
+                with queries_dangerously_enabled():
+                    with queries_disabled():
+                        with queries_dangerously_enabled():
+                            with queries_disabled():
+                                Widget.objects.count()
+                with self.assertRaises(QueriesDisabledError):
+                    Widget.objects.count()
+            with self.assertRaises(QueriesDisabledError):
+                Widget.objects.count()
+        Widget.objects.count()
 
 
 class FetchTestCase(TestCase):
