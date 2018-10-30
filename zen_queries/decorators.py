@@ -12,17 +12,23 @@ def _fake(*args, **kwargs):
 
 def _apply_monkeypatch():
     for connection in connections.all():
-        connection._real_create_cursor = connection.create_cursor
-        connection.create_cursor = _fake
+        connection._zen_queries_depth = getattr(connection, "_zen_queries_depth", 0) + 1
+        if connection._zen_queries_depth == 1:
+            connection._real_create_cursor = connection.create_cursor
+            connection.create_cursor = _fake
 
 
 def _remove_monkeypatch():
     for connection in connections.all():
-        assert hasattr(
-            connection, "_real_create_cursor"
-        ), "Cannot enable queries, not currently inside a queries_disabled block"
-        connection.create_cursor = connection._real_create_cursor
-        del connection._real_create_cursor
+        if not hasattr(connection, "_zen_queries_depth"):
+            assert hasattr(
+                connection, "_real_create_cursor"
+            ), "Cannot enable queries, not currently inside a queries_disabled block"
+        connection._zen_queries_depth -= 1
+        if connection._zen_queries_depth == 0:
+            connection.create_cursor = connection._real_create_cursor
+            del connection._real_create_cursor
+            del connection._zen_queries_depth
 
 
 @contextmanager
