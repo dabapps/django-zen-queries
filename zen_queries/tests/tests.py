@@ -63,6 +63,19 @@ class ContextManagerTestCase(TestCase):
                 Widget.objects.count()
         Widget.objects.count()
 
+        # Now nest inside each other!
+        with queries_disabled():
+            with queries_dangerously_enabled():
+                with queries_disabled():
+                    with queries_dangerously_enabled():
+                        Widget.objects.count()
+                    with self.assertRaises(QueriesDisabledError):
+                        Widget.objects.count()
+                Widget.objects.count()
+            with self.assertRaises(QueriesDisabledError):
+                Widget.objects.count()
+        Widget.objects.count()
+
 
 class FetchTestCase(TestCase):
     def test_fetch_all(self):
