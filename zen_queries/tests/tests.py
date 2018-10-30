@@ -5,6 +5,7 @@ from zen_queries import (
     queries_dangerously_enabled,
     QueriesDisabledError,
     QueriesDisabledSerializerMixin,
+    render,
     SimpleTemplateResponse,
     TemplateResponse,
 )
@@ -34,6 +35,13 @@ class FetchTestCase(TestCase):
             widgets = Widget.objects.all()
             with self.assertRaises(QueriesDisabledError):
                 fetch(widgets)
+
+
+class RenderShortcutTestCase(TestCase):
+    def test_render(self):
+        widgets = Widget.objects.all()
+        with self.assertRaises(QueriesDisabledError):
+            response = render(None, "template.html", {"widgets": widgets})
 
 
 class TemplateResponseTestCase(TestCase):
