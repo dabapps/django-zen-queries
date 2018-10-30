@@ -2,11 +2,11 @@ from django.shortcuts import render as django_render
 from zen_queries import queries_disabled
 
 
-def render(
-    request, template_name, context=None, content_type=None, status=None, using=None
-):
+def render(*args, **kwargs):
+    """
+    Wrapper around Django's `render` shortcut that is
+    not allowed to run database queries
+    """
     with queries_disabled():
-        response = django_render(
-            request, template_name, context, content_type, status, using
-        )
+        response = django_render(*args, **kwargs)
     return response
