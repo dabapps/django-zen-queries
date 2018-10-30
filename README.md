@@ -117,7 +117,7 @@ As well as the context managers, the package provides some tools to make it easi
 
 #### Render shortcut
 
-If you're using the Django `render` shortcut (as in the example above), to avoid having to explicitly add the context manager to every view, you can change your import `from django.shortcuts import render` to `from zen_queries import render`. All the views in that file will automatically be disallowed from running queries during template rendering.
+If you're using the Django `render` shortcut (as in the example above), to avoid having to add the context manager to every view, you can change your import `from django.shortcuts import render` to `from zen_queries import render`. All the views in that file will automatically be disallowed from running queries during template rendering.
 
 #### TemplateResponse subclass
 
