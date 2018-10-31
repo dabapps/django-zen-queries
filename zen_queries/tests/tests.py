@@ -4,10 +4,13 @@ from zen_queries import (
     queries_disabled,
     queries_dangerously_enabled,
     QueriesDisabledError,
-    QueriesDisabledSerializerMixin,
     render,
     SimpleTemplateResponse,
     TemplateResponse,
+)
+from zen_queries.rest_framework import (
+    QueriesDisabledSerializerMixin,
+    QueriesDisabledViewMixin,
 )
 from zen_queries.tests.models import Widget
 
@@ -105,3 +108,21 @@ class SerializerMixinTestCase(TestCase):
         serializer = QueriesDisabledSerializer(widgets)
         with self.assertRaises(QueriesDisabledError):
             serializer.data
+
+
+class FakeView(object):
+    def get_serializer(self, *args, **kwargs):
+        return FakeSerializer(Widget.objects.all())
+
+    def get(self):
+        return self.get_serializer().data
+
+
+class QueriesDisabledView(QueriesDisabledViewMixin, FakeView):
+    pass
+
+
+class RESTFrameworkViewMixinTestCase(TestCase):
+    def test_view_mixin(self):
+        with self.assertRaises(QueriesDisabledError):
+            QueriesDisabledView().get()
