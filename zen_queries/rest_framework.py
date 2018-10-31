@@ -10,7 +10,9 @@ class QueriesDisabledSerializerMixin(object):
 
 class QueriesDisabledViewMixin(object):
     def get_serializer(self, *args, **kwargs):
-        serializer = super().get_serializer(*args, **kwargs)
+        serializer = super(QueriesDisabledViewMixin, self).get_serializer(
+            *args, **kwargs
+        )
         serializer.__class__ = type(
             serializer.__class__.__name__,
             (QueriesDisabledSerializerMixin, serializer.__class__),
