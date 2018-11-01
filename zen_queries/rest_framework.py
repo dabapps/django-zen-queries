@@ -6,3 +6,20 @@ class QueriesDisabledSerializerMixin(object):
     def data(self):
         with queries_disabled():
             return super(QueriesDisabledSerializerMixin, self).data
+
+
+def disable_serializer_queries(serializer):
+    serializer.__class__ = type(
+        serializer.__class__.__name__,
+        (QueriesDisabledSerializerMixin, serializer.__class__),
+        {},
+    )
+    return serializer
+
+
+class QueriesDisabledViewMixin(object):
+    def get_serializer(self, *args, **kwargs):
+        serializer = super(QueriesDisabledViewMixin, self).get_serializer(
+            *args, **kwargs
+        )
+        return disable_serializer_queries(serializer)
