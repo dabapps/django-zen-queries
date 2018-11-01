@@ -9,6 +9,7 @@ from zen_queries import (
     TemplateResponse,
 )
 from zen_queries.rest_framework import (
+    disable_serializer_queries,
     QueriesDisabledSerializerMixin,
     QueriesDisabledViewMixin,
 )
@@ -106,6 +107,13 @@ class SerializerMixinTestCase(TestCase):
     def test_serializer_mixin(self):
         widgets = Widget.objects.all()
         serializer = QueriesDisabledSerializer(widgets)
+        with self.assertRaises(QueriesDisabledError):
+            serializer.data
+
+    def test_add_mixin_to_instance(self):
+        widgets = Widget.objects.all()
+        serializer = FakeSerializer(widgets)
+        serializer = disable_serializer_queries(serializer)
         with self.assertRaises(QueriesDisabledError):
             serializer.data
 
