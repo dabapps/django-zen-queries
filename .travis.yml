@@ -19,7 +19,7 @@ matrix:
       env: 'DJANGO_VERSION=2.1'
 install:
   - pip install -U django==$DJANGO_VERSION
-  - '[[ "$TRAVIS_PYTHON_VERSION" = "3.7" ]] && pip install black'
+  - 'if [ "$TRAVIS_PYTHON_VERSION" = "3.7" ]; then pip install black; fi'
 script:
   - python manage.py test
-  - '[[ "$TRAVIS_PYTHON_VERSION" = "3.7" ]] && black --check zen_queries'
+  - 'if [ "$TRAVIS_PYTHON_VERSION" = "3.7" ]; then black --check zen_queries; fi'
