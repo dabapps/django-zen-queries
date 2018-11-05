@@ -2,15 +2,15 @@ language: python
 sudo: required
 dist: xenial
 python:
-- '2.7'
-- '3.5'
-- '3.6'
-- '3.7'
+  - '2.7'
+  - '3.5'
+  - '3.6'
+  - '3.7'
 env:
-- DJANGO_VERSION=1.8
-- DJANGO_VERSION=1.11
-- DJANGO_VERSION=2.0
-- DJANGO_VERSION=2.1
+  - DJANGO_VERSION=1.8
+  - DJANGO_VERSION=1.11
+  - DJANGO_VERSION=2.0
+  - DJANGO_VERSION=2.1
 matrix:
   exclude:
     - python: '2.7'
@@ -18,5 +18,8 @@ matrix:
     - python: '2.7'
       env: 'DJANGO_VERSION=2.1'
 install:
-- pip install -U django==$DJANGO_VERSION
-script: python manage.py test
+  - pip install -U django==$DJANGO_VERSION
+  - 'if [ "$TRAVIS_PYTHON_VERSION" = "3.7" ]; then pip install black; fi'
+script:
+  - python manage.py test
+  - 'if [ "$TRAVIS_PYTHON_VERSION" = "3.7" ]; then black --check zen_queries; fi'
