@@ -118,11 +118,17 @@ class SerializerMixinTestCase(TestCase):
             serializer.data
 
 
+class FakeRequest(object):
+    def __init__(self, method):
+        self.method = method
+
+
 class FakeView(object):
     def get_serializer(self, *args, **kwargs):
         return FakeSerializer(Widget.objects.all())
 
-    def get(self):
+    def handle_request(self, method):
+        self.request = FakeRequest(method)
         return self.get_serializer().data
 
 
@@ -133,4 +139,7 @@ class QueriesDisabledView(QueriesDisabledViewMixin, FakeView):
 class RESTFrameworkViewMixinTestCase(TestCase):
     def test_view_mixin(self):
         with self.assertRaises(QueriesDisabledError):
-            QueriesDisabledView().get()
+            QueriesDisabledView().handle_request(method="GET")
+
+    def test_post_ignored(self):
+        QueriesDisabledView().handle_request(method="POST")

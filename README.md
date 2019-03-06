@@ -129,7 +129,7 @@ Django REST framework serializers are another major source of unexpected queries
 
 You can add this mixin to an existing serializer *instance* with `zen_queries.rest_framework.disable_serializer_queries` like this: `serializer = disable_serializer_queries(serializer)`.
 
-If you're using REST framework generic views, you can also add a view mixin, `zen_queries.rest_framework.QueriesDisabledViewMixin`, which overrides `get_serializer` to mix the `QueriesDisabledSerializerMixin` into your existing serializer. This is useful because you may want to use the same serializer class but only disable queries in some contexts, such as in a list view.
+If you're using REST framework generic views, you can also add a view mixin, `zen_queries.rest_framework.QueriesDisabledViewMixin`, which overrides `get_serializer` to mix the `QueriesDisabledSerializerMixin` into your existing serializer. This is useful because you may want to use the same serializer class between multiple views but only disable queries in some contexts, such as in a list view.  Remember that Python MRO is left-right, so the mixin must come before (to the left of) any base classes that implement `get_serializer`. The view mixin only disables queries on `GET` requests, so can safely be used with `ListCreateAPIView` and similar.
 
 #### Escape hatch
 
@@ -146,7 +146,7 @@ Probably best not to ask.
 Install from PyPI
 
     pip install django-zen-queries
-    
+
 ## Code of conduct
 
 For guidelines regarding the code of conduct when contributing to this repository please review [https://www.dabapps.com/open-source/code-of-conduct/](https://www.dabapps.com/open-source/code-of-conduct/)
