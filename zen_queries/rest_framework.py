@@ -22,6 +22,6 @@ class QueriesDisabledViewMixin(object):
         serializer = super(QueriesDisabledViewMixin, self).get_serializer(
             *args, **kwargs
         )
-        if self.request.method == 'GET':
+        if self.request.method == "GET":
             serializer = disable_serializer_queries(serializer)
         return serializer

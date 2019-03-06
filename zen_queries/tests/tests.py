@@ -139,7 +139,7 @@ class QueriesDisabledView(QueriesDisabledViewMixin, FakeView):
 class RESTFrameworkViewMixinTestCase(TestCase):
     def test_view_mixin(self):
         with self.assertRaises(QueriesDisabledError):
-            QueriesDisabledView().handle_request(method='GET')
+            QueriesDisabledView().handle_request(method="GET")
 
     def test_post_ignored(self):
-        QueriesDisabledView().handle_request(method='POST')
+        QueriesDisabledView().handle_request(method="POST")
