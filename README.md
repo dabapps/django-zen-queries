@@ -1,7 +1,7 @@
 django-zen-queries
 ====================
 
-[![Build Status](https://travis-ci.org/dabapps/django-zen-queries.svg)](https://travis-ci.org/dabapps/django-zen-queries)
+[![Build Status](https://travis-ci.com/dabapps/django-zen-queries.svg?branch=master)](https://travis-ci.com/dabapps/django-zen-queries)
 [![pypi release](https://img.shields.io/pypi/v/django-zen-queries.svg)](https://pypi.python.org/pypi/django-zen-queries)
 
 
@@ -140,8 +140,6 @@ If you absolutely definitely can't avoid running a query in a part of your codeb
 Probably best not to ask.
 
 ### Installation
-
-**This is not yet on PyPI. For now, install directly from GitHub**
 
 Install from PyPI
 
