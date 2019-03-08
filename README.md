@@ -141,8 +141,6 @@ Probably best not to ask.
 
 ### Installation
 
-**This is not yet on PyPI. For now, install directly from GitHub**
-
 Install from PyPI
 
     pip install django-zen-queries
