@@ -1,7 +1,7 @@
 django-zen-queries
 ====================
 
-[![Build Status](https://travis-ci.org/dabapps/django-zen-queries.svg)](https://travis-ci.org/dabapps/django-zen-queries)
+[![Build Status](https://travis-ci.com/dabapps/django-zen-queries.svg?branch=master)](https://travis-ci.com/dabapps/django-zen-queries)
 [![pypi release](https://img.shields.io/pypi/v/django-zen-queries.svg)](https://pypi.python.org/pypi/django-zen-queries)
 
 
