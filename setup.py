@@ -10,13 +10,13 @@ import sys
 
 name = "django-zen-queries"
 package = "zen_queries"
-description = "Explicit control over query execution in Django applications"
-url = "https://www.dabapps.com"
+description = "Explicit control over query execution in Django applications."
+url = "https://github.com/dabapps/django-zen-queries"
 author = "DabApps"
 author_email = "hello@dabapps.com"
 license = "BSD"
 
-long_description = description
+long_description = description + "\n\nFor full details, see https://github.com/dabapps/django-zen-queries"
 
 
 def get_version(package):
