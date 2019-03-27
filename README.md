@@ -19,6 +19,8 @@ The greatest strength of Django's ORM is also its greatest weakness. By freeing 
 
 Django's ORM makes queries _implicit_. The Zen of Python tells us that **explicit is better than implicit**, so let's be explicit about which parts of our code are allowed to run queries, and which aren't.
 
+Check out [this blog post](https://www.dabapps.com/blog/performance-issues-caused-by-django-implicit-database-queries/) for more background.
+
 ### Example
 
 Imagine a pizza restaurant website with the following models:
