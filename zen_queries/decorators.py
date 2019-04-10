@@ -6,20 +6,26 @@ class QueriesDisabledError(Exception):
     pass
 
 
-def _fake(*args, **kwargs):
+def _raise_exception(*args, **kwargs):
     raise QueriesDisabledError()
 
 
 def _apply_monkeypatch(connection):
-    connection._queries_disabled = True
-    connection._real_create_cursor = connection.create_cursor
-    connection.create_cursor = _fake
+    if hasattr(connection, "execute_wrappers"):
+        connection.execute_wrappers.append(_raise_exception)
+    else:
+        connection._queries_disabled = True
+        connection._real_create_cursor = connection.create_cursor
+        connection.create_cursor = _raise_exception
 
 
 def _remove_monkeypatch(connection):
-    connection.create_cursor = connection._real_create_cursor
-    del connection._real_create_cursor
-    del connection._queries_disabled
+    if hasattr(connection, "execute_wrappers"):
+        connection.execute_wrappers.pop()
+    else:
+        connection.create_cursor = connection._real_create_cursor
+        del connection._real_create_cursor
+        del connection._queries_disabled
 
 
 def _disable_queries():
@@ -34,6 +40,8 @@ def _enable_queries():
 
 def _are_queries_disabled():
     for connection in connections.all():
+        if hasattr(connection, "execute_wrappers"):
+            return _raise_exception in connection.execute_wrappers
         return hasattr(connection, "_queries_disabled")
 
 

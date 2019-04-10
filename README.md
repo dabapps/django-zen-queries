@@ -139,7 +139,7 @@ If you absolutely definitely can't avoid running a query in a part of your codeb
 
 ### How does it work?
 
-Probably best not to ask.
+For Django 2.0 or later, it uses the [Database Instrumentation](https://docs.djangoproject.com/en/2.2/topics/db/instrumentation/) features. For earlier versions of Django, probably best not to ask.
 
 ### Installation
 
