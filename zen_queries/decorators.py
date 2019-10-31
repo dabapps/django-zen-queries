@@ -7,6 +7,8 @@ class QueriesDisabledError(Exception):
 
 
 class QueriesDisabledCursor:
+    query = None
+
     def execute(self, sql, *args, **kwargs):
         raise QueriesDisabledError(sql)
 
