@@ -60,6 +60,14 @@ class ContextManagerTestCase(TestCase):
                 Widget.objects.count()
         Widget.objects.count()
 
+    def test_sql_in_exception(self):
+        queryset = Widget.objects.all()
+        with queries_disabled():
+            try:
+                fetch(queryset)
+            except QueriesDisabledError as e:
+                self.assertEqual(str(e), str(queryset.query))
+
 
 class FetchTestCase(TestCase):
     def test_fetch_all(self):

@@ -6,14 +6,27 @@ class QueriesDisabledError(Exception):
     pass
 
 
-def _fake(*args, **kwargs):
-    raise QueriesDisabledError()
+class QueriesDisabledCursor:
+    query = None
+
+    def execute(self, sql, *args, **kwargs):
+        raise QueriesDisabledError(sql)
+
+    def executemany(self, sql, *args, **kwargs):
+        raise QueriesDisabledError(sql)
+
+    def close(self):
+        pass
+
+
+def _create_queries_disabled_cursor(*args, **kwargs):
+    return QueriesDisabledCursor()
 
 
 def _apply_monkeypatch(connection):
     connection._queries_disabled = True
     connection._real_create_cursor = connection.create_cursor
-    connection.create_cursor = _fake
+    connection.create_cursor = _create_queries_disabled_cursor
 
 
 def _remove_monkeypatch(connection):
