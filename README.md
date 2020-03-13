@@ -137,6 +137,10 @@ If you're using REST framework generic views, you can also add a view mixin, `ze
 
 If you absolutely definitely can't avoid running a query in a part of your codebase that's being executed under a `queries_disabled` block, there is another context manager called `queries_dangerously_enabled` which allows you to temporarily re-enable database queries.
 
+### Permissions gotcha
+
+Accessing permissions in your templates (via the `{{ perms }}` template variable) can be a source of queries at template-render time. Fortunately, Django's permission checks are [cached by the `ModelBackend`](https://docs.djangoproject.com/en/2.2/topics/auth/default/#permission-caching), which can be pre-populated by calling `request.user.get_all_permissions()` in the view, before rendering the template.
+
 ### How does it work?
 
 Probably best not to ask.
@@ -150,4 +154,3 @@ Install from PyPI
 ## Code of conduct
 
 For guidelines regarding the code of conduct when contributing to this repository please review [https://www.dabapps.com/open-source/code-of-conduct/](https://www.dabapps.com/open-source/code-of-conduct/)
-
