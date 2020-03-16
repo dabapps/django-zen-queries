@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -e
+
+rm -rf dist/
+
+pip install --upgrade setuptools wheel
+python setup.py sdist bdist_wheel
+
+echo "Package built for distribution successfully..."
+
+read -p "Do you wish to publish the package to the Python Package Index? (If no, the package will be published to the TEST PyPi) - or press ctrl+C to cancel " yn
+pip install twine
+case $yn in
+    [Yy]* ) twine upload dist/*;;
+    * ) twine upload --repository-url https://test.pypi.org/legacy/ dist/*;;
+esac
