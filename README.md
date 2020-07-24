@@ -113,6 +113,17 @@ def menu(request):
 
 Now we have exactly what we need: when a developer comes along and adds `{{ pizza.toppings.count }}` in the template, **it just _won't work_**. They will be forced to figure out how to use `annotate` and `Count` in order to get the data they need _up front_, rather than sometime in the future when customers are complaining that the website is getting slower and slower!
 
+#### Decorator
+
+You can also use `queries_disabled` as a decorator to prohibit database interactions for a whole function or method:
+```
+@queries_disabled()
+def validate_xyz(pizzas):
+    ...
+```
+
+This also works with Django's [`method_decorator`](https://docs.djangoproject.com/en/3.0/topics/class-based-views/intro/#decorating-the-class) utility.
+
 ### Extra tools
 
 As well as the context managers, the package provides some tools to make it easier to use in common situations:
