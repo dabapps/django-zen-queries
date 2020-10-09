@@ -1,0 +1,29 @@
+name: CI
+
+on: [pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-18.04
+
+    strategy:
+      matrix:
+        python: [3.6, 3.7, 3.8]
+        django: [2.2]
+
+    env:
+      DATABASE_URL: ${{ matrix.database_url }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python }}
+    - name: Install dependencies
+      run: pip install -U django==${{ matrix.django }} black
+    - name: Run tests
+      run: python manage.py test
+    - name: Run black
+      run: black --check zen_queries
