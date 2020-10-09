@@ -12,9 +12,6 @@ jobs:
         python: [3.6, 3.7, 3.8]
         django: [2.2]
 
-    env:
-      DATABASE_URL: ${{ matrix.database_url }}
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python }}
