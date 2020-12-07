@@ -24,7 +24,7 @@ class QueriesDisabledViewMixin(object):
         )
         if self.request.method == "GET":
             serializer = disable_serializer_queries(serializer)
-            if getattr(serializer, "many", False) and serializer.instance is not None:
+            if getattr(serializer, "many", False):
                 # Serializer data must be fully evaluated prior to serialization. See #18.
-                serializer.instance = list(serializer.instance)
+                serializer.instance._fetch_all()
         return serializer

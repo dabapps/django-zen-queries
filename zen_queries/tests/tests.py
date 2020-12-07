@@ -14,6 +14,7 @@ from zen_queries.rest_framework import (
     QueriesDisabledViewMixin,
 )
 from zen_queries.tests.models import Widget
+from rest_framework import serializers
 
 
 class ContextManagerTestCase(TestCase):
@@ -98,29 +99,25 @@ class TemplateResponseTestCase(TestCase):
             response.render()
 
 
-class FakeSerializer(object):
-    def __init__(self, queryset):
-        self.queryset = queryset
-
-    @property
-    def data(self):
-        return [item.name for item in self.queryset]
+class WidgetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Widget
+        fields = ["name"]
 
 
-class QueriesDisabledSerializer(QueriesDisabledSerializerMixin, FakeSerializer):
+class QueriesDisabledSerializer(QueriesDisabledSerializerMixin, WidgetSerializer):
     pass
 
 
 class SerializerMixinTestCase(TestCase):
     def test_serializer_mixin(self):
-        widgets = Widget.objects.all()
-        serializer = QueriesDisabledSerializer(widgets)
+        serializer = QueriesDisabledSerializer(Widget.objects.all(), many=True)
         with self.assertRaises(QueriesDisabledError):
             serializer.data
 
     def test_add_mixin_to_instance(self):
         widgets = Widget.objects.all()
-        serializer = FakeSerializer(widgets)
+        serializer = WidgetSerializer(widgets, many=True)
         serializer = disable_serializer_queries(serializer)
         with self.assertRaises(QueriesDisabledError):
             serializer.data
@@ -133,7 +130,7 @@ class FakeRequest(object):
 
 class FakeView(object):
     def get_serializer(self, *args, **kwargs):
-        return FakeSerializer(Widget.objects.all())
+        return WidgetSerializer(Widget.objects.all(), many=True)
 
     def handle_request(self, method):
         self.request = FakeRequest(method)
@@ -146,8 +143,15 @@ class QueriesDisabledView(QueriesDisabledViewMixin, FakeView):
 
 class RESTFrameworkViewMixinTestCase(TestCase):
     def test_view_mixin(self):
-        with self.assertRaises(QueriesDisabledError):
-            QueriesDisabledView().handle_request(method="GET")
+        view = QueriesDisabledView()
+        view.handle_request(method="GET")
+        self.assertTrue(
+            isinstance(view.get_serializer(), QueriesDisabledSerializerMixin)
+        )
 
     def test_post_ignored(self):
-        QueriesDisabledView().handle_request(method="POST")
+        view = QueriesDisabledView()
+        view.handle_request(method="POST")
+        self.assertFalse(
+            isinstance(view.get_serializer(), QueriesDisabledSerializerMixin)
+        )
