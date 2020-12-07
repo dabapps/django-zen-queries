@@ -21,6 +21,7 @@ matrix:
     - python: '2.7'
       env: 'DJANGO_VERSION=2.2'
 install:
+  - pip install -e .
   - pip install -U django==$DJANGO_VERSION
   - 'if [ "$TRAVIS_PYTHON_VERSION" = "3.7" ]; then pip install black; fi'
 script:
