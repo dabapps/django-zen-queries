@@ -1,7 +1,14 @@
 from zen_queries import queries_disabled
 
 
-class QueriesDisabledSerializerMixin(object):
+class QueriesDisabledSerializerMixin:
+    @classmethod
+    def many_init(self, *args, **kwargs):
+        """
+        Ensure queries are also disabled when `many=True`.
+        """
+        return disable_serializer_queries(super().many_init(*args, **kwargs))
+
     @property
     def data(self):
         with queries_disabled():
