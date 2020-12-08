@@ -1,6 +1,7 @@
 django-zen-queries
 ====================
 
+![Build Status](https://github.com/dabapps/django-zen-queries/workflows/CI/badge.svg)
 [![pypi release](https://img.shields.io/pypi/v/django-zen-queries.svg)](https://pypi.python.org/pypi/django-zen-queries)
 
 
