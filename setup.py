@@ -16,7 +16,8 @@ author = "DabApps"
 author_email = "hello@dabapps.com"
 license = "BSD"
 
-long_description = description + "\n\nFor full details, see https://github.com/dabapps/django-zen-queries"
+with open("README.md") as f:
+    readme = f.read()
 
 
 def get_version(package):
@@ -72,13 +73,19 @@ setup(
     url=url,
     license=license,
     description=description,
-    long_description=long_description,
+    long_description=readme,
+    long_description_content_type="text/markdown",
     author=author,
     author_email=author_email,
     packages=get_packages(package),
     package_data=get_package_data(package),
+    python_requires=">=3.6",
     install_requires=[
-        "Django>=1.8",
+        "Django>=2.2",
         "djangorestframework>=3.6.0"
-    ]
+    ],
+    project_urls={
+        "Changelog": "https://github.com/dabapps/django-zen-queries/releases",
+        "Issues": "https://github.com/dabapps/django-zen-queries/issues",
+    }
 )
