@@ -82,5 +82,9 @@ setup(
     install_requires=[
         "Django>=1.8",
         "djangorestframework>=3.6.0"
-    ]
+    ],
+    project_urls={
+        "Changelog": "https://github.com/dabapps/django-zen-queries/releases",
+        "Issues": "https://github.com/dabapps/django-zen-queries/issues",
+    }
 )
