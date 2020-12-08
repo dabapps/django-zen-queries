@@ -1,7 +1,15 @@
 from zen_queries import queries_disabled
+from zen_queries.utils import fetch
 
 
-class QueriesDisabledSerializerMixin(object):
+class QueriesDisabledSerializerMixin:
+    @classmethod
+    def many_init(self, *args, **kwargs):
+        """
+        Ensure queries are also disabled when `many=True`.
+        """
+        return disable_serializer_queries(super().many_init(*args, **kwargs))
+
     @property
     def data(self):
         with queries_disabled():
@@ -24,4 +32,7 @@ class QueriesDisabledViewMixin(object):
         )
         if self.request.method == "GET":
             serializer = disable_serializer_queries(serializer)
+            if getattr(serializer, "many", False):
+                # Serializer data must be fully evaluated prior to serialization. See #18.
+                fetch(serializer.instance)
         return serializer
