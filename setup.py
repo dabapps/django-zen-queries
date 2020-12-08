@@ -16,7 +16,8 @@ author = "DabApps"
 author_email = "hello@dabapps.com"
 license = "BSD"
 
-long_description = description + "\n\nFor full details, see https://github.com/dabapps/django-zen-queries"
+with open("README.md") as f:
+    readme = f.read()
 
 
 def get_version(package):
@@ -72,7 +73,8 @@ setup(
     url=url,
     license=license,
     description=description,
-    long_description=long_description,
+    long_description=readme,
+    long_description_content_type="text/markdown",
     author=author,
     author_email=author_email,
     packages=get_packages(package),
