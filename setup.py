@@ -82,7 +82,6 @@ setup(
     python_requires=">=3.6",
     install_requires=[
         "Django>=2.2",
-        "djangorestframework>=3.6.0"
     ],
     project_urls={
         "Changelog": "https://github.com/dabapps/django-zen-queries/releases",
