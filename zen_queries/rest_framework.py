@@ -1,5 +1,6 @@
 from zen_queries import queries_disabled
 from zen_queries.utils import fetch
+from django.db.models import QuerySet
 
 
 class QueriesDisabledSerializerMixin:
@@ -32,7 +33,9 @@ class QueriesDisabledViewMixin(object):
         )
         if self.request.method == "GET":
             serializer = disable_serializer_queries(serializer)
-            if getattr(serializer, "many", False):
+            if getattr(serializer, "many", False) and isinstance(
+                serializer.instance, QuerySet
+            ):
                 # Serializer data must be fully evaluated prior to serialization. See #18.
                 fetch(serializer.instance)
         return serializer
