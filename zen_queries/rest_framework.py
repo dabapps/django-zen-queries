@@ -1,4 +1,5 @@
 from zen_queries import queries_disabled
+from zen_queries.utils import fetch
 
 
 class QueriesDisabledSerializerMixin:
@@ -33,5 +34,5 @@ class QueriesDisabledViewMixin(object):
             serializer = disable_serializer_queries(serializer)
             if getattr(serializer, "many", False):
                 # Serializer data must be fully evaluated prior to serialization. See #18.
-                serializer.instance._fetch_all()
+                fetch(serializer.instance)
         return serializer
