@@ -148,6 +148,15 @@ class QueriesDisabledView(QueriesDisabledViewMixin, FakeView):
     pass
 
 
+class FakeListView(FakeView):
+    def get_serializer(self, *args, **kwargs):
+        return WidgetSerializer(list(Widget.objects.all()), many=True)
+
+
+class QueriesDisabledListView(QueriesDisabledViewMixin, FakeListView):
+    pass
+
+
 class RESTFrameworkViewMixinTestCase(TestCase):
     def test_view_mixin(self):
         view = QueriesDisabledView()
@@ -160,5 +169,12 @@ class RESTFrameworkViewMixinTestCase(TestCase):
         view = QueriesDisabledView()
         view.handle_request(method="POST")
         self.assertFalse(
+            isinstance(view.get_serializer(), QueriesDisabledSerializerMixin)
+        )
+
+    def test_serializer_with_list(self):
+        view = QueriesDisabledListView()
+        view.handle_request(method="GET")
+        self.assertTrue(
             isinstance(view.get_serializer(), QueriesDisabledSerializerMixin)
         )
