@@ -136,6 +136,8 @@ If you're using the Django `render` shortcut (as in the example above), to avoid
 
 `TemplateResponse` (and `SimpleTemplateResponse`) objects are lazy, meaning that template rendering happens on the way "out" of the Django stack. `zen_queries.TemplateResponse` and `zen_queries.SimpleTemplateResponse` are subclasses of these with `queries_disabled` applied to the `render` method.
 
+You can tell Django's class-based views to use these subclasses instead of the default `TemplateResponse` by setting the `response_class` attribute on the view to `zen_queries.TemplateResponse`.
+
 #### Django REST framework Serializer and View mixins
 
 Django REST framework serializers are another major source of unexpected queries. Adding a field to a serializer (perhaps deep within a tree of nested serializers) can very easily cause your application to suddenly start emitting hundreds of queries. `zen_queries.rest_framework.QueriesDisabledSerializerMixin` can be added to any serializer to wrap `queries_disabled` around the `.data` property, meaning that the serialization phase is not allowed to execute any queries.
