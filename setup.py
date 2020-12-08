@@ -81,7 +81,7 @@ setup(
     package_data=get_package_data(package),
     python_requires=">=3.6",
     install_requires=[
-        "Django>=1.8",
+        "Django>=2.2",
         "djangorestframework>=3.6.0"
     ],
     project_urls={
