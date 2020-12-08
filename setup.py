@@ -79,6 +79,7 @@ setup(
     author_email=author_email,
     packages=get_packages(package),
     package_data=get_package_data(package),
+    python_requires=">=3.6",
     install_requires=[
         "Django>=1.8",
         "djangorestframework>=3.6.0"
