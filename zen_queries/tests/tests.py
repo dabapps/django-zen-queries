@@ -77,6 +77,13 @@ class FetchTestCase(TestCase):
             with self.assertRaises(QueriesDisabledError):
                 fetch(widgets)
 
+    def test_returns_queryset(self):
+        widgets = Widget.objects.all()
+        fetched_widgets = fetch(widgets)
+        self.assertIs(widgets, fetched_widgets)
+        self.assertIsNotNone(widgets._result_cache)
+        self.assertIsNotNone(fetched_widgets._result_cache)
+
 
 class RenderShortcutTestCase(TestCase):
     def test_render(self):
