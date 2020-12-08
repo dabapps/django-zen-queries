@@ -154,7 +154,7 @@ Accessing permissions in your templates (via the `{{ perms }}` template variable
 
 ### How does it work?
 
-Probably best not to ask.
+It uses the [Database Instrumentation](https://docs.djangoproject.com/en/2.2/topics/db/instrumentation/) features introduced in Django 2.0.
 
 ### Installation
 

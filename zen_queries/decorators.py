@@ -6,48 +6,23 @@ class QueriesDisabledError(Exception):
     pass
 
 
-class QueriesDisabledCursor:
-    query = None
-
-    def execute(self, sql, *args, **kwargs):
-        raise QueriesDisabledError(sql)
-
-    def executemany(self, sql, *args, **kwargs):
-        raise QueriesDisabledError(sql)
-
-    def close(self):
-        pass
-
-
-def _create_queries_disabled_cursor(*args, **kwargs):
-    return QueriesDisabledCursor()
-
-
-def _apply_monkeypatch(connection):
-    connection._queries_disabled = True
-    connection._real_create_cursor = connection.create_cursor
-    connection.create_cursor = _create_queries_disabled_cursor
-
-
-def _remove_monkeypatch(connection):
-    connection.create_cursor = connection._real_create_cursor
-    del connection._real_create_cursor
-    del connection._queries_disabled
+def _raise_exception(execute, sql, params, many, context):
+    raise QueriesDisabledError(sql)
 
 
 def _disable_queries():
     for connection in connections.all():
-        _apply_monkeypatch(connection)
+        connection.execute_wrappers.append(_raise_exception)
 
 
 def _enable_queries():
     for connection in connections.all():
-        _remove_monkeypatch(connection)
+        connection.execute_wrappers.pop()
 
 
 def _are_queries_disabled():
     for connection in connections.all():
-        return hasattr(connection, "_queries_disabled")
+        return _raise_exception in connection.execute_wrappers
 
 
 def _are_queries_dangerously_enabled():
