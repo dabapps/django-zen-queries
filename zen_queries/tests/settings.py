@@ -7,3 +7,5 @@ TEMPLATES = [
 ]
 
 SECRET_KEY = "abcde12345"
+
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
