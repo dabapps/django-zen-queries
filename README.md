@@ -46,7 +46,7 @@ def menu(request):
 
 Finally, the template:
 
-```
+```jinja2
 <h1>Pizza Menu</h1>
 
 <ul>
@@ -60,7 +60,7 @@ How many queries are run here? Well, the answer is easy to see: it's just one! T
 
 Now: imagine the client asks for each pizza on the menu to include a count of how many toppings are on the pizza. Easy! Just change the template:
 
-```
+```jinja2
 <h1>Pizza Menu</h1>
 
 <ul>
@@ -116,7 +116,8 @@ Now we have exactly what we need: when a developer comes along and adds `{{ pizz
 #### Decorator
 
 You can also use `queries_disabled` as a decorator to prohibit database interactions for a whole function or method:
-```
+
+```python
 @queries_disabled()
 def validate_xyz(pizzas):
     ...
