@@ -151,6 +151,36 @@ If you're using REST framework generic views, you can also add a view mixin, `ze
 
 If you absolutely definitely can't avoid running a query in a part of your codebase that's being executed under a `queries_disabled` block, there is another context manager called `queries_dangerously_enabled` which allows you to temporarily re-enable database queries.
 
+#### Template Tags
+
+Block tags for Django's template system are provided which allow you to enable or disable query execution directly in your templates.
+
+**Important note: In order to use the template libary, you must add `"zen_queries"` to your `INSTALLED_APPS` setting.** Then, use `{% load zen_queries %}` at the top of your template to load the tag library.
+
+The `{% queries_disabled}` tag is most useful if you wish to apply `django-zen-queries` patterns to a third-party library which provides customisation via overriding templates, such as the Django admin.
+
+```jinja2
+{% load zen_queries %}
+
+{% queries_disabled %}
+<ul>
+{% for pizza in pizzas %}
+  <li>{{ pizza.name }}</li>
+{% endfor %}
+</ul>
+{% end_queries_disabled %}
+```
+
+The `{% queries_dangerously_enabled %}` tag is handy if you are using the `render` shortcut or `TemplateResponse` subclass (see above) but wish to allow particular parts of your templates to execute queries. This should be used with caution, and you should wrap only the smallest possible sections of your template: the precise line or lines that need to execute the queries.
+
+```jinja2
+{% load zen_queries %}
+
+{% queries_dangerously_enabled %}
+There are {{ pizzas.count }} pizzas.
+{% end_queries_dangerously_enabled %}
+```
+
 ### Permissions gotcha
 
 Accessing permissions in your templates (via the `{{ perms }}` template variable) can be a source of queries at template-render time. Fortunately, Django's permission checks are [cached by the `ModelBackend`](https://docs.djangoproject.com/en/2.2/topics/auth/default/#permission-caching), which can be pre-populated by calling `request.user.get_all_permissions()` in the view, before rendering the template.

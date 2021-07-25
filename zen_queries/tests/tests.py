@@ -1,3 +1,4 @@
+from django.shortcuts import render as django_render
 from django.test import TestCase
 from zen_queries import (
     fetch,
@@ -104,6 +105,17 @@ class TemplateResponseTestCase(TestCase):
         response = TemplateResponse(None, "template.html", {"widgets": widgets})
         with self.assertRaises(QueriesDisabledError):
             response.render()
+
+
+class TemplateTagTestCase(TestCase):
+    def test_queries_disabled_template_tag(self):
+        widgets = Widget.objects.all()
+        with self.assertRaises(QueriesDisabledError):
+            django_render(None, "queries_disabled_tag.html", {"widgets": widgets})
+
+    def test_queries_dangerously_enabled_template_tag(self):
+        widgets = Widget.objects.all()
+        render(None, "queries_dangerously_enabled_tag.html", {"widgets": widgets})
 
 
 class WidgetSerializer(serializers.ModelSerializer):
