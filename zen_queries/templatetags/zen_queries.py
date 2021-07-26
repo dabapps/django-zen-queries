@@ -5,21 +5,22 @@ import zen_queries
 register = Library()
 
 
-class RenderNodelistWithContextManagerNode(Node):
+class QueriesDisabledNode(Node):
     def __init__(self, nodelist):
         self.nodelist = nodelist
 
     def render(self, context):
-        with self.context_manager:
+        with zen_queries.queries_disabled():
             return self.nodelist.render(context)
 
 
-class QueriesDisabledNode(RenderNodelistWithContextManagerNode):
-    context_manager = zen_queries.queries_disabled()
+class QueriesDangerouslyEnabledNode(Node):
+    def __init__(self, nodelist):
+        self.nodelist = nodelist
 
-
-class QueriesDangerouslyEnabledNode(RenderNodelistWithContextManagerNode):
-    context_manager = zen_queries.queries_dangerously_enabled()
+    def render(self, context):
+        with zen_queries.queries_dangerously_enabled():
+            return self.nodelist.render(context)
 
 
 @register.tag
