@@ -1,6 +1,6 @@
 DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}}
 
-INSTALLED_APPS = ["zen_queries.tests"]
+INSTALLED_APPS = ["zen_queries", "zen_queries.tests"]
 
 TEMPLATES = [
     {"BACKEND": "django.template.backends.django.DjangoTemplates", "APP_DIRS": True}
