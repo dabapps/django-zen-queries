@@ -9,6 +9,14 @@ Gives you control over which parts of your code are allowed to run queries, and 
 
 Tested against Django 2.2 - 3.2 on Python 3.6 - 3.9.
 
+#### Testimonial
+
+> Using `zen-queries` it became clear very quickly that I could not place any of my business logic in the template if I wanted to eradicate my pesky n+1 bug. `zen-queries` just would not let it happen.
+> 
+> So I rethought the view and as recommended, judicious use of `select_related` and `prefetch_related` from the view level took me from over 4k DB queries to just 12
+> 
+> [@ry_austin](https://twitter.com/ry_austin)
+
 ### Motivation
 
 > Explicit is better than implicit
