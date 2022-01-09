@@ -9,3 +9,13 @@ from zen_queries.utils import fetch
 
 
 __version__ = "2.1.0"
+
+__all__ = [
+    "fetch",
+    "queries_dangerously_enabled",
+    "queries_disabled",
+    "QueriesDisabledError",
+    "render",
+    "SimpleTemplateResponse",
+    "TemplateResponse",
+]

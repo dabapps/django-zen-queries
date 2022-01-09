@@ -6,9 +6,9 @@ from zen_queries import queries_disabled
 
 
 class RenderMixin:
-    def render(self, *args, **kwargs):
+    def render(self) -> DjangoSimpleTemplateResponse:
         with queries_disabled():
-            return super().render(*args, **kwargs)
+            return super().render()  # type: ignore
 
 
 class TemplateResponse(RenderMixin, DjangoTemplateResponse):
