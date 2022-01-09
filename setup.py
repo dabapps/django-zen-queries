@@ -54,7 +54,12 @@ def get_package_data(package):
 
     filepaths = []
     for base, filenames in walk:
+        if "__pycache__" in base:
+            continue
+        if base.startswith(".mypy_cache"):
+            continue
         filepaths.extend([os.path.join(base, filename) for filename in filenames])
+    filepaths.append("py.typed")
     return {package: filepaths}
 
 
@@ -86,5 +91,5 @@ setup(
     project_urls={
         "Changelog": "https://github.com/dabapps/django-zen-queries/releases",
         "Issues": "https://github.com/dabapps/django-zen-queries/issues",
-    }
+    },
 )
