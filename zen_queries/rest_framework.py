@@ -14,7 +14,7 @@ class QueriesDisabledSerializerMixin:
     @property
     def data(self):
         with queries_disabled():
-            return super(QueriesDisabledSerializerMixin, self).data
+            return super().data
 
 
 def disable_serializer_queries(serializer):
@@ -26,9 +26,9 @@ def disable_serializer_queries(serializer):
     return serializer
 
 
-class QueriesDisabledViewMixin(object):
+class QueriesDisabledViewMixin:
     def get_serializer(self, *args, **kwargs):
-        serializer = super(QueriesDisabledViewMixin, self).get_serializer(
+        serializer = super().get_serializer(
             *args, **kwargs
         )
         if self.request.method == "GET":

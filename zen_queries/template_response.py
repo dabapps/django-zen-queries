@@ -5,10 +5,10 @@ from django.template.response import (
 from zen_queries import queries_disabled
 
 
-class RenderMixin(object):
+class RenderMixin:
     def render(self, *args, **kwargs):
         with queries_disabled():
-            return super(RenderMixin, self).render(*args, **kwargs)
+            return super().render(*args, **kwargs)
 
 
 class TemplateResponse(RenderMixin, DjangoTemplateResponse):
