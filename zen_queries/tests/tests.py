@@ -25,7 +25,7 @@ class ContextManagerTestCase(TestCase):
             with self.assertRaises(QueriesDisabledError):
                 Widget.objects.count()
 
-    @override_settings(ZEN_QUERIES_WARN=True)
+    @override_settings(ZEN_QUERIES_WARN=False)
     def test_queries_disabled_warnings_on(self):
         with queries_disabled():
             with self.assertWarns(QueriesDisabledWarning):
