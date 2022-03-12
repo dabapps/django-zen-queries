@@ -30,6 +30,4 @@ jobs:
     - name: Install dependencies
       run: pip install -U django==${{ matrix.django }} black djangorestframework pytz
     - name: Run tests
-      run: python manage.py test
-    - name: Run black
-      run: black --check zen_queries
+      run: ./runtests

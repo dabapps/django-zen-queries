@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -e
+
+black zen_queries
+flake8 zen_queries
+isort zen_queries
