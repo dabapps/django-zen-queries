@@ -28,6 +28,8 @@ jobs:
     - name: Install package
       run: pip install -e .
     - name: Install dependencies
-      run: pip install -U django==${{ matrix.django }} black djangorestframework pytz
+      run: pip install -r dev-requirements.txt
+    - name: Install Django
+      run: pip install -U django==${{ matrix.django }}
     - name: Run tests
       run: ./runtests
