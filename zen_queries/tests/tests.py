@@ -9,6 +9,7 @@ from zen_queries import (
     SimpleTemplateResponse,
     TemplateResponse,
 )
+from zen_queries.decorators import QueriesDisabledWarning
 from zen_queries.rest_framework import (
     disable_serializer_queries,
     QueriesDisabledSerializerMixin,
@@ -16,7 +17,6 @@ from zen_queries.rest_framework import (
 )
 from zen_queries.tests.models import Widget
 from rest_framework import serializers
-from django.conf import settings
 
 
 class ContextManagerTestCase(TestCase):
@@ -27,9 +27,8 @@ class ContextManagerTestCase(TestCase):
 
     @override_settings(ZEN_QUERIES_WARN=True)
     def test_queries_disabled_warnings_on(self):
-        print(settings.ZEN_QUERIES_WARN)
         with queries_disabled():
-            with self.assertWarns(Warning):
+            with self.assertWarns(QueriesDisabledWarning):
                 Widget.objects.count()
 
 
