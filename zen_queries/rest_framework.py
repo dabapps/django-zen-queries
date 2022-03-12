@@ -1,6 +1,6 @@
+from django.db.models import QuerySet
 from zen_queries import queries_disabled
 from zen_queries.utils import fetch
-from django.db.models import QuerySet
 
 
 class QueriesDisabledSerializerMixin:

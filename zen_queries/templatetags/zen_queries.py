@@ -1,6 +1,6 @@
 from django.template import Library, Node
-import zen_queries
 
+import zen_queries
 
 register = Library()
 
