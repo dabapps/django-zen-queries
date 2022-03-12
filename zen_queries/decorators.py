@@ -1,13 +1,20 @@
 from contextlib import contextmanager
+import warnings
 from django.db import connections
-
+from django.conf import settings
 
 class QueriesDisabledError(Exception):
     pass
 
+class QueriesDisabledWarning(Warning):
+    pass
+
 
 def _raise_exception(execute, sql, params, many, context):
-    raise QueriesDisabledError(sql)
+    if(hasattr(settings, 'ZEN_QUERIES_WARN') and settings.ZEN_QUERIES_WARN):
+        warnings.warn("sql", QueriesDisabledWarning)
+    else:
+        raise QueriesDisabledError(sql)
 
 
 def _disable_queries():

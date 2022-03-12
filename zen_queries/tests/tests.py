@@ -1,5 +1,5 @@
 from django.shortcuts import render as django_render
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from zen_queries import (
     fetch,
     queries_disabled,
@@ -16,6 +16,7 @@ from zen_queries.rest_framework import (
 )
 from zen_queries.tests.models import Widget
 from rest_framework import serializers
+from django.conf import settings
 
 
 class ContextManagerTestCase(TestCase):
@@ -23,6 +24,14 @@ class ContextManagerTestCase(TestCase):
         with queries_disabled():
             with self.assertRaises(QueriesDisabledError):
                 Widget.objects.count()
+
+    @override_settings(ZEN_QUERIES_WARN=True)
+    def test_queries_disabled_warnings_on(self):
+        print(settings.ZEN_QUERIES_WARN)
+        with queries_disabled():
+            with self.assertWarns(Warning):
+                Widget.objects.count()
+
 
     def test_nested_queries_disabled(self):
         with queries_disabled():
