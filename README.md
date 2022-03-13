@@ -1,7 +1,9 @@
-# django-zen-queries
+django-zen-queries
+====================
 
 ![Build Status](https://github.com/dabapps/django-zen-queries/workflows/CI/badge.svg)
 [![pypi release](https://img.shields.io/pypi/v/django-zen-queries.svg)](https://pypi.python.org/pypi/django-zen-queries)
+
 
 Gives you control over which parts of your code are allowed to run queries, and which aren't.
 
@@ -10,9 +12,9 @@ Tested against Django 2.2, 3.2 and 4.0 on Python 3.6, 3.7, 3.8, 3.9 and 3.10.
 #### Testimonial
 
 > Using `zen-queries` it became clear very quickly that I could not place any of my business logic in the template if I wanted to eradicate my pesky n+1 bug. `zen-queries` just would not let it happen.
->
+> 
 > So I rethought the view and as recommended, judicious use of `select_related` and `prefetch_related` from the view level took me from over 4k DB queries to just 12
->
+> 
 > [@ry_austin](https://twitter.com/ry_austin)
 
 ### Motivation
@@ -149,9 +151,9 @@ You can tell Django's class-based views to use these subclasses instead of the d
 
 Django REST framework serializers are another major source of unexpected queries. Adding a field to a serializer (perhaps deep within a tree of nested serializers) can very easily cause your application to suddenly start emitting hundreds of queries. `zen_queries.rest_framework.QueriesDisabledSerializerMixin` can be added to any serializer to wrap `queries_disabled` around the `.data` property, meaning that the serialization phase is not allowed to execute any queries.
 
-You can add this mixin to an existing serializer _instance_ with `zen_queries.rest_framework.disable_serializer_queries` like this: `serializer = disable_serializer_queries(serializer)`.
+You can add this mixin to an existing serializer *instance* with `zen_queries.rest_framework.disable_serializer_queries` like this: `serializer = disable_serializer_queries(serializer)`.
 
-If you're using REST framework generic views, you can also add a view mixin, `zen_queries.rest_framework.QueriesDisabledViewMixin`, which overrides `get_serializer` to mix the `QueriesDisabledSerializerMixin` into your existing serializer. This is useful because you may want to use the same serializer class between multiple views but only disable queries in some contexts, such as in a list view. Remember that Python MRO is left-right, so the mixin must come before (to the left of) any base classes that implement `get_serializer`. The view mixin only disables queries on `GET` requests, so can safely be used with `ListCreateAPIView` and similar.
+If you're using REST framework generic views, you can also add a view mixin, `zen_queries.rest_framework.QueriesDisabledViewMixin`, which overrides `get_serializer` to mix the `QueriesDisabledSerializerMixin` into your existing serializer. This is useful because you may want to use the same serializer class between multiple views but only disable queries in some contexts, such as in a list view.  Remember that Python MRO is left-right, so the mixin must come before (to the left of) any base classes that implement `get_serializer`. The view mixin only disables queries on `GET` requests, so can safely be used with `ListCreateAPIView` and similar.
 
 #### Escape hatch
 
@@ -208,6 +210,7 @@ Django settings file, and instead of throwing a `QueriesDisabledError`,
 `queries_disabled` will raise a `QueriesDisabledWarning`.
 
     ZEN_QUERIES_WARN = True
+
 
 ## Code of conduct
 
