@@ -9,4 +9,4 @@ from zen_queries.template_response import TemplateResponse, SimpleTemplateRespon
 from zen_queries.utils import fetch
 
 
-__version__ = "2.1.0"
+__version__ = "2.2.0"

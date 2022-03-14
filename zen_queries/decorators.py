@@ -13,6 +13,7 @@ class QueriesDisabledWarning(Warning):
 def _raise_exception(execute, sql, params, many, context):
     if(hasattr(settings, 'ZEN_QUERIES_WARN') and settings.ZEN_QUERIES_WARN):
         warnings.warn(sql, QueriesDisabledWarning)
+        return execute(sql, params, many, context)
     else:
         raise QueriesDisabledError(sql)
 
