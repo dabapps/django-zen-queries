@@ -1,5 +1,5 @@
 from django.shortcuts import render as django_render
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from zen_queries import (
     fetch,
     queries_disabled,
@@ -9,6 +9,7 @@ from zen_queries import (
     SimpleTemplateResponse,
     TemplateResponse,
 )
+from zen_queries.decorators import QueriesDisabledWarning
 from zen_queries.rest_framework import (
     disable_serializer_queries,
     QueriesDisabledSerializerMixin,
@@ -22,6 +23,12 @@ class ContextManagerTestCase(TestCase):
     def test_queries_disabled(self):
         with queries_disabled():
             with self.assertRaises(QueriesDisabledError):
+                Widget.objects.count()
+
+    @override_settings(ZEN_QUERIES_WARN=True)
+    def test_queries_disabled_warnings_on(self):
+        with queries_disabled():
+            with self.assertWarns(QueriesDisabledWarning):
                 Widget.objects.count()
 
     def test_nested_queries_disabled(self):

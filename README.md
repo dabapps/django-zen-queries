@@ -203,6 +203,15 @@ Install from PyPI
 
     pip install django-zen-queries
 
+### Configuration
+
+If you would prefer to raise a warning instead of an error, put this in your
+Django settings file, and instead of throwing a `QueriesDisabledError`,
+`queries_disabled` will raise a `QueriesDisabledWarning`.
+
+    ZEN_QUERIES_WARN = True
+
+
 ## Code of conduct
 
 For guidelines regarding the code of conduct when contributing to this repository please review [https://www.dabapps.com/open-source/code-of-conduct/](https://www.dabapps.com/open-source/code-of-conduct/)
