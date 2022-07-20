@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -e
+
+black --check zen_queries
+flake8 zen_queries
+isort --check --diff zen_queries
+python manage.py test --noinput $@

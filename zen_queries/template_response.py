@@ -1,7 +1,7 @@
 from django.template.response import (
     SimpleTemplateResponse as DjangoSimpleTemplateResponse,
-    TemplateResponse as DjangoTemplateResponse,
 )
+from django.template.response import TemplateResponse as DjangoTemplateResponse
 from zen_queries import queries_disabled
 
 

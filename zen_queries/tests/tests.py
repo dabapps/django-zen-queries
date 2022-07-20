@@ -1,9 +1,10 @@
 from django.shortcuts import render as django_render
 from django.test import TestCase
+from rest_framework import serializers
 from zen_queries import (
     fetch,
-    queries_disabled,
     queries_dangerously_enabled,
+    queries_disabled,
     QueriesDisabledError,
     render,
     SimpleTemplateResponse,
@@ -15,7 +16,6 @@ from zen_queries.rest_framework import (
     QueriesDisabledViewMixin,
 )
 from zen_queries.tests.models import Widget
-from rest_framework import serializers
 
 
 class ContextManagerTestCase(TestCase):
@@ -90,7 +90,7 @@ class RenderShortcutTestCase(TestCase):
     def test_render(self):
         widgets = Widget.objects.all()
         with self.assertRaises(QueriesDisabledError):
-            response = render(None, "template.html", {"widgets": widgets})
+            render(None, "template.html", {"widgets": widgets})
 
 
 class TemplateResponseTestCase(TestCase):
