@@ -7,7 +7,7 @@ django-zen-queries
 
 Gives you control over which parts of your code are allowed to run queries, and which aren't.
 
-Tested against Django 3.2, 4.0 and 4.1 on Python 3.7, 3.8, 3.9, 3.10 and 3.11.
+Tested against Django 3.2, 4.0, 4.1 and 4.2 on Python 3.8, 3.9, 3.10 and 3.11.
 
 #### Testimonial
 
