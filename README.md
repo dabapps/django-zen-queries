@@ -189,6 +189,11 @@ There are {{ pizzas.count }} pizzas.
 {% end_queries_dangerously_enabled %}
 ```
 
+#### Custom disabled queries handler
+Zen Queries provides flexibility with the capacity to set a custom handler that can exhibit any behavior you desire when queries are disabled. This custom handler should be a callable (a function or a method). You can configure this custom handler in Zen Queries by specifying the Python import path to the callable as a string in the ZEN_QUERIES_DISABLED_HANDLER setting.
+
+By default, if queries are disabled and an attempt is made to execute a query, Zen Queries raises an exception. However, with a custom handler, you can override this behavior to better suit your application's specific needs.
+
 ### Permissions gotcha
 
 Accessing permissions in your templates (via the `{{ perms }}` template variable) can be a source of queries at template-render time. Fortunately, Django's permission checks are [cached by the `ModelBackend`](https://docs.djangoproject.com/en/2.2/topics/auth/default/#permission-caching), which can be pre-populated by calling `request.user.get_all_permissions()` in the view, before rendering the template.

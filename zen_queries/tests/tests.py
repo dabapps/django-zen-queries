@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.db import connections
 from django.shortcuts import render as django_render
 from django.test import TestCase
 from rest_framework import serializers
@@ -16,6 +18,8 @@ from zen_queries.rest_framework import (
     QueriesDisabledViewMixin,
 )
 from zen_queries.tests.models import Widget
+
+import importlib
 
 
 class ContextManagerTestCase(TestCase):
@@ -190,3 +194,33 @@ class RESTFrameworkViewMixinTestCase(TestCase):
         self.assertTrue(
             isinstance(view.get_serializer(), QueriesDisabledSerializerMixin)
         )
+
+
+def custom_queries_disabled_handler():
+    raise QueriesDisabledError("Custom queries disabled handler")
+
+
+class CustomQueryWrapperTestCase(TestCase):
+    def setUp(self):
+        super().setUp()
+        self.original_wrapper = getattr(settings, "ZEN_QUERIES_DISABLED_HANDLER", None)
+        settings.ZEN_QUERIES_DISABLED_HANDLER = (
+            "zen_queries.tests.tests.custom_queries_disabled_handler"
+        )
+
+    def tearDown(self):
+        settings.ZEN_QUERIES_DISABLED_HANDLER = self.original_wrapper
+        super().tearDown()
+
+    def test_custom_wrapper(self):
+        custom_wrapper_path = getattr(settings, "ZEN_QUERIES_DISABLED_HANDLER", None)
+        self.assertIsNotNone(custom_wrapper_path)
+
+        module_path, function_name = custom_wrapper_path.rsplit(".", 1)
+
+        module = importlib.import_module(module_path)
+        custom_wrapper = getattr(module, function_name)
+
+        with queries_disabled():
+            for connection in connections.all():
+                self.assertIn(custom_wrapper, connection.execute_wrappers)

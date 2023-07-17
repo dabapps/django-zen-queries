@@ -1,5 +1,9 @@
 from contextlib import contextmanager
+from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from django.db import connections
+
+import importlib
 
 
 class QueriesDisabledError(Exception):
@@ -10,9 +14,19 @@ def _raise_exception(execute, sql, params, many, context):
     raise QueriesDisabledError(sql)
 
 
+def _get_custom_wrapper():
+    custom_wrapper_path = getattr(settings, "ZEN_QUERIES_DISABLED_HANDLER", None)
+    if custom_wrapper_path:
+        module_path, function_name = custom_wrapper_path.rsplit(".", 1)
+        module = importlib.import_module(module_path)
+        return getattr(module, function_name, None)
+
+
 def _disable_queries():
+    custom_wrapper = _get_custom_wrapper()
+
     for connection in connections.all():
-        connection.execute_wrappers.append(_raise_exception)
+        connection.execute_wrappers.append(custom_wrapper or _raise_exception)
 
 
 def _enable_queries():
