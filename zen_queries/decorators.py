@@ -1,6 +1,6 @@
 from contextlib import contextmanager
 from django.db import connections
-from django.conf import settings
+from zen_queries import settings
 
 
 class QueriesDisabledError(Exception):
