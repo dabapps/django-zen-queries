@@ -45,6 +45,7 @@ def _mark_as_not_dangerously_enabled():
 def queries_disabled():
     if not settings.ZEN_QUERIES_ENABLED:
         yield
+        return
     queries_already_disabled = _are_queries_disabled()
     if not queries_already_disabled and not _are_queries_dangerously_enabled():
         _disable_queries()
@@ -59,6 +60,7 @@ def queries_disabled():
 def queries_dangerously_enabled():
     if not settings.ZEN_QUERIES_ENABLED:
         yield
+        return
     queries_dangerously_enabled_before = _are_queries_dangerously_enabled()
     if not queries_dangerously_enabled_before:
         _mark_as_dangerously_enabled()
