@@ -1,5 +1,6 @@
 from contextlib import contextmanager
 from django.db import connections
+from django.conf import settings
 
 
 class QueriesDisabledError(Exception):
@@ -42,6 +43,8 @@ def _mark_as_not_dangerously_enabled():
 
 @contextmanager
 def queries_disabled():
+    if not settings.ZEN_QUERIES_ENABLED:
+        yield
     queries_already_disabled = _are_queries_disabled()
     if not queries_already_disabled and not _are_queries_dangerously_enabled():
         _disable_queries()
@@ -54,6 +57,8 @@ def queries_disabled():
 
 @contextmanager
 def queries_dangerously_enabled():
+    if not settings.ZEN_QUERIES_ENABLED:
+        yield
     queries_dangerously_enabled_before = _are_queries_dangerously_enabled()
     if not queries_dangerously_enabled_before:
         _mark_as_dangerously_enabled()
