@@ -1,4 +1,4 @@
-black==22.6.0
+black==24.3.0
 djangorestframework==3.13.1
 flake8==4.0.1
 isort==5.10.1
