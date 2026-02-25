@@ -131,7 +131,7 @@ def validate_xyz(pizzas):
     ...
 ```
 
-This also works with Django's [`method_decorator`](https://docs.djangoproject.com/en/6.0/topics/class-based-views/intro/#decorating-the-class) utility.
+This also works with Django's [`method_decorator`](https://docs.djangoproject.com/en/5.2/topics/class-based-views/intro/#decorating-the-class) utility.
 
 ### Extra tools
 
@@ -191,11 +191,11 @@ There are {{ pizzas.count }} pizzas.
 
 ### Permissions gotcha
 
-Accessing permissions in your templates (via the `{{ perms }}` template variable) can be a source of queries at template-render time. Fortunately, Django's permission checks are [cached by the `ModelBackend`](https://docs.djangoproject.com/en/6.0/topics/auth/default/#permission-caching), which can be pre-populated by calling `request.user.get_all_permissions()` in the view, before rendering the template.
+Accessing permissions in your templates (via the `{{ perms }}` template variable) can be a source of queries at template-render time. Fortunately, Django's permission checks are [cached by the `ModelBackend`](https://docs.djangoproject.com/en/5.2/topics/auth/default/#permission-caching), which can be pre-populated by calling `request.user.get_all_permissions()` in the view, before rendering the template.
 
 ### How does it work?
 
-It uses the [Database Instrumentation](https://docs.djangoproject.com/en/6.0/topics/db/instrumentation/) features introduced in Django 2.0.
+It uses the [Database Instrumentation](https://docs.djangoproject.com/en/5.2/topics/db/instrumentation/) features introduced in Django 2.0.
 
 ### Installation
 
