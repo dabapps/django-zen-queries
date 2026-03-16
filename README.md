@@ -100,6 +100,8 @@ To be absolutely clear: this package does _not_ give you any tools to actually i
 To demonstrate how to use `django-zen-queries`, let's go back to our example. We want to make it impossible for changes to a template to trigger queries. So, we change our view as follows:
 
 ```python
+from zen_queries import queries_disabled
+
 def menu(request):
     pizzas = Pizza.objects.all()
     context = {'pizzas': pizzas}
@@ -112,6 +114,8 @@ The `queries_disabled` context manager here does one very simple thing: it stops
 That's _almost_ enough to give us what we need, but not quite. The code above will _always_ raise a `QueriesDisabledError`, because the queryset (`Pizza.objects.all()`) is _lazy_. The database query doesn't actually get run until the queryset is iterated - which happens in the template! So, `django-zen-queries` provides a tiny helper function, `fetch`, which forces evaluation of a queryset:
 
 ```python
+from zen_queries import queries_disabled, fetch
+
 def menu(request):
     pizzas = Pizza.objects.all()
     context = {'pizzas': fetch(pizzas)}
