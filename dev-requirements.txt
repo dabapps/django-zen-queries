@@ -1,4 +1,4 @@
 black==26.1.0
-djangorestframework==3.16.1
+djangorestframework==3.17.2
 flake8==7.3.0
 isort==8.0.0
